@@ -16,12 +16,23 @@ class Task implements Serializable {
         this.completed = false;
     }
 
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public Date getDueDate() { return dueDate; }
+    public void setDueDate(Date dueDate) { this.dueDate = dueDate; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+    public int getPriority() { return priority; }
+    public void setPriority(int priority) { this.priority = priority; }
+    public boolean isCompleted() { return completed; }
+    public void markComplete() { completed = true; }
+
     public void display() {
         System.out.printf("Title: %s\nDesc: %s\nDue: %s\nCat: %s\nPriority: %d\nStatus: %s\n",
             title, description, dueDate, category, priority, completed ? "Completed" : "Pending");
     }
-
-    public void markComplete() { completed = true; }
 }
 
 public class TaskManagerApp {
@@ -69,23 +80,22 @@ public class TaskManagerApp {
         int idx = sc.nextInt(); sc.nextLine();
         if (idx > 0 && idx <= tasks.size()) {
             Task t = tasks.get(idx-1);
-            System.out.print("New Title (cur: " + t.title + "): "); String nt = sc.nextLine();
-            if (!nt.isEmpty()) t.title = nt;
-            System.out.print("New Desc (cur: " + t.description + "): "); String nd = sc.nextLine();
-            if (!nd.isEmpty()) t.description = nd;
-            System.out.print("New Due (cur: " + t.dueDate + ") YYYY-MM-DD: "); String ndu = sc.nextLine();
-            if (!ndu.isEmpty()) t.dueDate = java.sql.Date.valueOf(ndu);
-            System.out.print("New Category (cur: " + t.category + "): "); String nc = sc.nextLine();
-            if (!nc.isEmpty()) t.category = nc;
-            System.out.print("New Priority (cur: " + t.priority + "): "); String npr = sc.nextLine();
-            if (!npr.isEmpty()) t.priority = Integer.parseInt(npr);
+            System.out.print("New Title (cur: " + t.getTitle() + "): "); String nt = sc.nextLine();
+            if (!nt.isEmpty()) t.setTitle(nt);
+            System.out.print("New Desc (cur: " + t.getDescription() + "): "); String nd = sc.nextLine();
+            if (!nd.isEmpty()) t.setDescription(nd);
+            System.out.print("New Due (cur: " + t.getDueDate() + ") YYYY-MM-DD: "); String ndu = sc.nextLine();
+            if (!ndu.isEmpty()) t.setDueDate(java.sql.Date.valueOf(ndu));
+            System.out.print("New Category (cur: " + t.getCategory() + "): "); String nc = sc.nextLine();
+            if (!nc.isEmpty()) t.setCategory(nc);
+            System.out.print("New Priority (cur: " + t.getPriority() + "): "); String npr = sc.nextLine();
+            if (!npr.isEmpty()) t.setPriority(Integer.parseInt(npr));
             System.out.println("Edited.");
         }
     }
 
     static void deleteTask(Scanner sc) {
-        showTasks(); System.out.print("Delete #:");
-        int idx = sc.nextInt(); sc.nextLine();
+        showTasks(); System.out.print("Delete #:"); int idx = sc.nextInt(); sc.nextLine();
         if (idx > 0 && idx <= tasks.size()) {
             tasks.remove(idx-1); System.out.println("Deleted.");
         }
@@ -99,7 +109,8 @@ public class TaskManagerApp {
 
     static void searchTasks(Scanner sc) {
         System.out.print("Keyword: "); String kw = sc.nextLine();
-        for (Task t : tasks) if (t.title.contains(kw) || t.description.contains(kw)) t.display();
+        for (Task t : tasks)
+            if (t.getTitle().contains(kw) || t.getDescription().contains(kw)) t.display();
     }
 
     static void saveTasks() {
@@ -111,6 +122,6 @@ public class TaskManagerApp {
     static void loadTasks() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             tasks = (List<Task>) in.readObject();
-        } catch (Exception e) { /* file missing */ }
+        } catch (Exception e) { /* file missing or first run */ }
     }
 }
