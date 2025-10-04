@@ -46,7 +46,7 @@ class Task implements Serializable {
     public void markIncomplete() { completed = false; }
 }
 
-public class Main {
+public class TaskManagerApp {
     private static java.util.ArrayList<Task> tasks = new java.util.ArrayList<>();
     private static String file = "tasks.ser";
     private static java.util.ArrayList<String> categories = new java.util.ArrayList<>(java.util.Arrays.asList("Work", "Home", "Personal", "Misc"));
@@ -311,3 +311,4 @@ public class Main {
         }
     }
 }
+
